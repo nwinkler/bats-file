@@ -49,6 +49,20 @@ assert_file_exist() {
   fi
 }
 
+# Fail and display path of the link if it does not exist. Also fails
+# if the path exists, but is not a link.
+# This function is the logical complement of `assert_link_not_exist'.
+#
+# Globals:
+#   BATSLIB_FILE_PATH_REM
+#   BATSLIB_FILE_PATH_ADD
+# Arguments:
+#   $1 - path
+# Returns:
+#   0 - link exists and is a link
+#   1 - otherwise
+# Outputs:
+#   STDERR - details, on failure
 assert_link_exist() {
   local -r file="$1"
   if [[ ! -L "$file" ]]; then
