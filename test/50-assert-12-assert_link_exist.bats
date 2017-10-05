@@ -26,7 +26,17 @@ fixtures 'exist'
   run assert_link_exist "$file"
   [ "$status" -eq 1 ]
   [ "${#lines[@]}" -eq 3 ]
-  [ "${lines[0]}" == '-- link does not exist --' ]
+  [ "${lines[0]}" == '-- exists, but is not a link --' ]
+  [ "${lines[1]}" == "path : $file" ]
+  [ "${lines[2]}" == '--' ]
+}
+
+@test 'assert_link_exist() <link>: returns 1 and displays path if <link> exists, but is a directory, not a link' {
+  local -r file="${TEST_FIXTURE_ROOT}/dir"
+  run assert_link_exist "$file"
+  [ "$status" -eq 1 ]
+  [ "${#lines[@]}" -eq 3 ]
+  [ "${lines[0]}" == '-- exists, but is not a link --' ]
   [ "${lines[1]}" == "path : $file" ]
   [ "${lines[2]}" == '--' ]
 }
