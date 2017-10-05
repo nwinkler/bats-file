@@ -51,7 +51,8 @@ assert_file_exist() {
 
 # Fail and display path of the link if it does not exist. Also fails
 # if the path exists, but is not a link.
-# This function is the logical complement of `assert_link_not_exist'.
+# This function is the logical complement of `assert_file_not_exist'.
+# There is no dedicated function for checking that a link does not exist.
 #
 # Globals:
 #   BATSLIB_FILE_PATH_REM

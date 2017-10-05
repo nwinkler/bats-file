@@ -21,6 +21,16 @@ fixtures 'exist'
   [ "${lines[2]}" == '--' ]
 }
 
+@test 'assert_file_not_exist() <file>: returns 1 and displays path if <link> exists' {
+  local -r file="${TEST_FIXTURE_ROOT}/dir/mylink"
+  run assert_file_not_exist "$file"
+  [ "$status" -eq 1 ]
+  [ "${#lines[@]}" -eq 3 ]
+  [ "${lines[0]}" == '-- file exists, but it was expected to be absent --' ]
+  [ "${lines[1]}" == "path : $file" ]
+  [ "${lines[2]}" == '--' ]
+}
+
 # Transforming path
 @test 'assert_file_not_exist() <file>: replace prefix of displayed path' {
   local -r BATSLIB_FILE_PATH_REM="#${TEST_FIXTURE_ROOT}"
