@@ -49,6 +49,17 @@ assert_file_exist() {
   fi
 }
 
+assert_link_exist() {
+  local -r file="$1"
+  if [[ ! -L "$file" ]]; then
+    local -r rem="$BATSLIB_FILE_PATH_REM"
+    local -r add="$BATSLIB_FILE_PATH_ADD"
+    batslib_print_kv_single 4 'path' "${file/$rem/$add}" \
+      | batslib_decorate 'link does not exist' \
+      | fail
+  fi
+}
+
 # Fail and display path of the file (or directory) if it exists. This
 # function is the logical complement of `assert_file_exist'.
 #
