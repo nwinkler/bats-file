@@ -66,6 +66,7 @@ assert_file_exist() {
 #   STDERR - details, on failure
 assert_link_exist() {
   local -r file="$1"
+  local -r target="$2"
   if [[ ! -L "$file" ]]; then
     local -r rem="$BATSLIB_FILE_PATH_REM"
     local -r add="$BATSLIB_FILE_PATH_ADD"
@@ -77,6 +78,18 @@ assert_link_exist() {
       batslib_print_kv_single 4 'path' "${file/$rem/$add}" \
         | batslib_decorate 'link does not exist' \
         | fail
+    fi
+  else
+    if [ -n "$target" ]; then
+      local link_target=''
+      link_target=$(readlink "$file")
+      if [[ "$link_target" != "$target" ]]; then
+        batslib_print_kv_single_or_multi 8 'path' "${file/$rem/$add}" \
+            'expected' "$target" \
+            'actual'   "$link_target" \
+          | batslib_decorate 'link exists, but does not point to target file' \
+          | fail
+      fi
     fi
   fi
 }

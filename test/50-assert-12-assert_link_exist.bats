@@ -11,6 +11,29 @@ fixtures 'exist'
   [ "${#lines[@]}" -eq 0 ]
 }
 
+@test 'assert_link_exist() <link>: returns 0 if <link> exists and points to <file>' {
+  local -r link="${TEST_FIXTURE_ROOT}/dir/mylink"
+  local -r file="file"
+  run assert_link_exist "$link" "$file"
+  [ "$status" -eq 0 ]
+  [ "${#lines[@]}" -eq 0 ]
+}
+
+@test 'assert_link_exist() <link>: returns 1 if <link> exists, but does not point to <file>' {
+  local -r link="${TEST_FIXTURE_ROOT}/dir/mylink"
+  local -r file="file.does_not_exist"
+  local -r actual_file="file"
+  run assert_link_exist "$link" "$file"
+  echo "${lines[@]}"
+  [ "$status" -eq 1 ]
+  [ "${#lines[@]}" -eq 5 ]
+  [ "${lines[0]}" == '-- link exists, but does not point to target file --' ]
+  [ "${lines[1]}" == "path     : $link" ]
+  [ "${lines[2]}" == "expected : $file" ]
+  [ "${lines[3]}" == "actual   : $actual_file" ]
+  [ "${lines[4]}" == '--' ]
+}
+
 @test 'assert_link_exist() <link>: returns 1 and displays path if <link> does not exist' {
   local -r file="${TEST_FIXTURE_ROOT}/dir/mylink.does_not_exist"
   run assert_link_exist "$file"
